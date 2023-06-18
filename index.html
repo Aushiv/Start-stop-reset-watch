@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stopwatch App</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    .container {
+      margin-top: 50px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Stopwatch</h1>
+    <div id="timer">00:00:00</div>
+    <br>
+    <button id="startBtn" class="btn btn-primary">Start</button>
+    <button id="stopBtn" class="btn btn-danger">Stop</button>
+    <button id="resetBtn" class="btn btn-secondary">Reset</button>
+  </div>
+
+  <script>
+    // Get the buttons and timer element
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const timer = document.getElementById('timer');
+
+    // Variables to track the timer
+    let startTime;
+    let elapsedTime = 0;
+    let timerInterval;
+
+    // Function to start the timer
+    function startTimer() {
+      startTime = Date.now() - elapsedTime;
+      timerInterval = setInterval(updateTimer, 10);
+      startBtn.disabled = true;
+    }
+
+    // Function to update the timer
+    function updateTimer() {
+      const currentTime = Date.now();
+      elapsedTime = currentTime - startTime;
+      displayTime(elapsedTime);
+    }
+
+    // Function to display the time
+    function displayTime(time) {
+      const milliseconds = Math.floor((time % 1000) / 10);
+      const seconds = Math.floor((time / 1000) % 60);
+      const minutes = Math.floor((time / (1000 * 60)) % 60);
+      const hours = Math.floor((time / (1000 * 60 * 60)) % 24);
+
+      timer.textContent = `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}.${formatTime(milliseconds)}`;
+    }
+
+    // Function to format the time with leading zeros
+    function formatTime(time) {
+      return time < 10 ? `0${time}` : time;
+    }
+
+    // Function to stop the timer
+    function stopTimer() {
+      clearInterval(timerInterval);
+      startBtn.disabled = false;
+    }
+
+    // Function to reset the timer
+    function resetTimer() {
+      stopTimer();
+      elapsedTime = 0;
+      displayTime(elapsedTime);
+    }
+
+    // Event listeners for the buttons
+    startBtn.addEventListener('click', startTimer);
+    stopBtn.addEventListener('click', stopTimer);
+    resetBtn.addEventListener('click', resetTimer);
+  </script>
+</body>
+</html>
